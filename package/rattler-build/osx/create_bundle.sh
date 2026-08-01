@@ -1,0 +1,142 @@
+#!/bin/bash
+
+set -e
+set -x
+
+conda_env="CivilCvCAD.app/Contents/Resources"
+
+mkdir -p ${conda_env}
+
+cp -a ../.pixi/envs/default/* ${conda_env}
+
+# delete unnecessary stuff
+rm -rf ${conda_env}/include
+find ${conda_env} -name \*.a -delete
+
+mv ${conda_env}/bin ${conda_env}/bin_tmp
+mkdir ${conda_env}/bin
+cp ${conda_env}/bin_tmp/civilcvcad ${conda_env}/bin/
+cp ${conda_env}/bin_tmp/civilcvcadcmd ${conda_env}/bin
+cp ${conda_env}/bin_tmp/ccx ${conda_env}/bin/
+cp ${conda_env}/bin_tmp/python ${conda_env}/bin/
+cp ${conda_env}/bin_tmp/pip ${conda_env}/bin/
+cp ${conda_env}/bin_tmp/pyside6-rcc ${conda_env}/bin/
+cp ${conda_env}/bin_tmp/gmsh ${conda_env}/bin/
+cp ${conda_env}/bin_tmp/dot ${conda_env}/bin/
+cp ${conda_env}/bin_tmp/unflatten ${conda_env}/bin/
+rm -rf ${conda_env}/bin_tmp
+
+sed -i '1s|.*|#!/usr/bin/env python|' ${conda_env}/bin/pip
+
+# copy resources
+cp resources/* ${conda_env}
+
+# Remove __pycache__ folders and .pyc files
+find . -path "*/__pycache__/*" -delete
+find . -name "*.pyc" -type f -delete
+
+# fix problematic rpaths and reexport_dylibs for signing
+# see https://github.com/CivilCvCAD/CivilCvCAD/issues/10144#issuecomment-1836686775
+# and https://github.com/CivilCvCAD/CivilCvCAD-Bundle/pull/203
+# and https://github.com/CivilCvCAD/CivilCvCAD-Bundle/issues/375
+python ../scripts/fix_macos_lib_paths.py ${conda_env}/lib -r
+
+# build and install the launcher
+cmake -B build launcher
+cmake --build build
+mkdir -p CivilCvCAD.app/Contents/MacOS
+cp build/CivilCvCAD CivilCvCAD.app/Contents/MacOS/CivilCvCAD
+
+# Add deployment target suffix to artifact name (e.g., "-macOS11" or "-macOS15")
+deploy_target="${MACOS_DEPLOYMENT_TARGET:-11.0}"
+version_name="CivilCvCAD_${BUILD_TAG}-macOS${deploy_target%%.*}-$(uname -m)"
+application_menu_name="CivilCvCAD_${BUILD_TAG}"
+
+echo -e "\################"
+echo -e "version_name:  ${version_name}"
+echo -e "################"
+
+# Extract Apple-compliant bundle version from version.json
+# For dev/weekly builds, append a "d" + ISO week number suffix (e.g. "1.2.0d12")
+# per Apple's CFBundleVersion spec for development builds
+bundle_version=$(python3 -c "
+import json, datetime
+d = json.load(open('../../../version.json'))
+v = f'{d[\"version_major\"]}.{d[\"version_minor\"]}.{d[\"version_patch\"]}'
+suffix = d.get('version_suffix', '')
+if suffix:
+    week = datetime.date.today().isocalendar()[1]
+    v += f'd{week}'
+print(v)
+")
+
+cp Info.plist.template ${conda_env}/../Info.plist
+sed -i "s/CIVILCVCAD_BUNDLE_VERSION/${bundle_version}/" ${conda_env}/../Info.plist
+sed -i "s/APPLICATION_MENU_NAME/${application_menu_name}/" ${conda_env}/../Info.plist
+
+pixi list -e default > CivilCvCAD.app/Contents/packages.txt
+sed -i '1s/.*/\nLIST OF PACKAGES:/' CivilCvCAD.app/Contents/packages.txt
+
+echo "Running CivilCvCAD command-line smoke test..."
+if ! "${conda_env}/bin/civilcvcadcmd" --safe-mode --version; then
+    echo "CivilCvCAD command-line smoke test failed; the macOS bundle cannot start."
+    exit 1
+fi
+
+echo "Running CivilCvCAD bundled Pivy smoke test..."
+if ! "${conda_env}/bin/civilcvcadcmd" --safe-mode --console "import pivy; from pivy import coin; print(pivy.__file__); print(coin.SoDB.getVersion())"; then
+    echo "CivilCvCAD bundled Pivy smoke test failed; the macOS bundle cannot import the bundled Coin/Pivy runtime."
+    exit 1
+fi
+
+# move plugins into their final location (Library only exists for macOS < 15.0 builds)
+if [ -d "${conda_env}/Library" ]; then
+    mv ${conda_env}/Library ${conda_env}/..
+fi
+
+# move App Extensions (PlugIns) to the correct location for macOS registration
+if [ -d "${conda_env}/PlugIns" ]; then
+    mv ${conda_env}/PlugIns ${conda_env}/..
+fi
+
+if [[ "${MACOS_SIGN_RELEASE}" == "true" ]]; then
+    # create the signed dmg
+    ../../scripts/macos_sign_and_notarize.zsh -p "CivilCvCAD" -k ${MACOS_SIGNING_KEY_ID} -o "${version_name}.dmg"
+else
+    # Ad-hoc sign for local builds (required for QuickLook extensions to register)
+    if [ -d "CivilCvCAD.app/Contents/PlugIns" ]; then
+        echo "Ad-hoc signing App Extensions with entitlements..."
+        codesign --force --sign - \
+            --entitlements ../../../src/MacAppBundle/QuickLook/modern/ThumbnailExtension.entitlements \
+            CivilCvCAD.app/Contents/PlugIns/CivilCvCADThumbnailExtension.appex
+        codesign --force --sign - \
+            --entitlements ../../../src/MacAppBundle/QuickLook/modern/PreviewExtension.entitlements \
+            CivilCvCAD.app/Contents/PlugIns/CivilCvCADPreviewExtension.appex
+    fi
+    echo "Ad-hoc signing app bundle..."
+    codesign --force --sign - CivilCvCAD.app/Contents/packages.txt
+    if [ -f "CivilCvCAD.app/Contents/Library/QuickLook/QuicklookFCStd.qlgenerator/Contents/MacOS/QuicklookFCStd" ]; then
+        codesign --force --sign - CivilCvCAD.app/Contents/Library/QuickLook/QuicklookFCStd.qlgenerator/Contents/MacOS/QuicklookFCStd
+    fi
+    codesign --force --sign - CivilCvCAD.app
+
+    # create the dmg
+    dmgbuild -s dmg_settings.py "CivilCvCAD" "${version_name}.dmg"
+fi
+
+# create hash
+sha256sum ${version_name}.dmg > ${version_name}.dmg-SHA256.txt
+
+if [[ "${UPLOAD_RELEASE}" == "true" ]]; then
+    for attempt in 1 2 3 4 5; do
+        if gh release upload --clobber ${BUILD_TAG} "${version_name}.dmg" "${version_name}.dmg-SHA256.txt"; then
+            break
+        fi
+        if [[ $attempt -eq 5 ]]; then
+            echo "Failed to upload release after 5 attempts" >&2
+            exit 1
+        fi
+        echo "Upload attempt $attempt failed, retrying in $((attempt * 10))s..."
+        sleep $((attempt * 10))
+    done
+fi

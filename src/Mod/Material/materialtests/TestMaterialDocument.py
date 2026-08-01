@@ -1,0 +1,112 @@
+# SPDX-License-Identifier: LGPL-2.1-or-later
+
+# ***************************************************************************
+# *                                                                         *
+# *   Copyright (c) 2024 FreeCAD Project Association                        *
+# *                                                                         *
+# *   This file is part of CivilCvCAD.                                         *
+# *                                                                         *
+# *   CivilCvCAD is free software: you can redistribute it and/or modify it    *
+# *   under the terms of the GNU Lesser General Public License as           *
+# *   published by the Free Software Foundation, either version 2.1 of the  *
+# *   License, or (at your option) any later version.                       *
+# *                                                                         *
+# *   CivilCvCAD is distributed in the hope that it will be useful, but        *
+# *   WITHOUT ANY WARRANTY; without even the implied warranty of            *
+# *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU      *
+# *   Lesser General Public License for more details.                       *
+# *                                                                         *
+# *   You should have received a copy of the GNU Lesser General Public      *
+# *   License along with CivilCvCAD. If not, see                               *
+# *   <https://www.gnu.org/licenses/>.                                      *
+# *                                                                         *
+# ***************************************************************************
+
+import unittest
+import CivilCvCAD
+import Materials
+
+
+class DocumentTestCases(unittest.TestCase):
+    """
+    Test class for CivilCvCAD material tests that need a document
+    """
+
+    def setUp(self):
+        self.doc = CivilCvCAD.newDocument()
+
+    def tearDown(self):
+        CivilCvCAD.closeDocument(self.doc.Name)
+
+    def testApplyDiffuseColorCheckShapeAppearance(self):
+        """ Test that applying a DiffuseColor with transparency results in a correct ShapeAppearance """
+        if "BUILD_PART" in CivilCvCAD.__cmake__ and CivilCvCAD.GuiUp:
+            dif_col_1 = (1.0, 1.0, 0.0, 1.0)  # yellow 0% transparent
+            dif_col_2 = (1.0, 0.0, 0.0, 0.5)  # red 50% transparent
+            dif_col = [dif_col_1] + [dif_col_2] + 4 * [dif_col_1]
+
+            obj = self.doc.addObject("Part::Box")
+            vobj = obj.ViewObject
+            vobj.DiffuseColor = dif_col
+
+            self.assertEqual(
+                [m.DiffuseColor[:3] + (1.0 - m.Transparency, ) for m in vobj.ShapeAppearance],
+                vobj.DiffuseColor
+            )
+
+    def testApplyShapeAppearanceCheckDiffuseColor(self):
+        """ Test that applying a ShapeAppearance with transparency results in a correct DiffuseColor """
+        if "BUILD_PART" in CivilCvCAD.__cmake__ and CivilCvCAD.GuiUp:
+            sapp_1 = CivilCvCAD.Material()
+            sapp_1.DiffuseColor = (0.0, 1.0, 1.0, 0.0)  # cyan
+            sapp_1.Transparency = 0.0                   # 0% transparent
+            sapp_2 = CivilCvCAD.Material()
+            sapp_2.DiffuseColor = (0.0, 1.0, 0.0, 0.0)  # green
+            sapp_2.Transparency = 0.3                   # 30% transparent
+            sapp = [sapp_1] + [sapp_2] + 4 * [sapp_1]
+
+            obj = self.doc.addObject("Part::Box")
+            vobj = obj.ViewObject
+            vobj.ShapeAppearance = sapp
+
+            self.assertEqual(
+                [m.DiffuseColor[:3] + (1.0 - m.Transparency, ) for m in vobj.ShapeAppearance],
+                vobj.DiffuseColor
+            )
+
+    def testApplyNoAppearanceThenAppearanceMaterial(self):
+        """Applying a material with no appearance then one with appearance must update ShapeAppearance.
+
+        Regression test for https://github.com/CivilCvCAD/CivilCvCAD/issues/25793 — applying Air
+        (no appearance properties) followed by Wood-Generic must still apply Wood's colors.
+        """
+        if "BUILD_PART" not in CivilCvCAD.__cmake__ or not CivilCvCAD.GuiUp:
+            return
+
+        manager = Materials.MaterialManager()
+
+        # Air: physical-only material, no appearance properties
+        air_uuid = "94370b96-c97e-4a3f-83b2-11d7461f7da7"
+        # Wood-Generic inherits Wood appearance: DiffuseColor ~ (0.898, 0.730, 0.391)
+        wood_uuid = "b588224e-e8d6-47ad-ba1f-a058333fd1c6"
+
+        obj = self.doc.addObject("Part::Box")
+        self.doc.recompute()
+        vobj = obj.ViewObject
+
+        default_color = vobj.ShapeAppearance[0].DiffuseColor
+
+        obj.ShapeMaterial = manager.getMaterial(air_uuid)
+        self.assertEqual(
+            vobj.ShapeAppearance[0].DiffuseColor,
+            default_color,
+            "Applying Air (no appearance) must not change ShapeAppearance",
+        )
+
+        obj.ShapeMaterial = manager.getMaterial(wood_uuid)
+        wood_color = vobj.ShapeAppearance[0].DiffuseColor
+        self.assertNotEqual(
+            wood_color,
+            default_color,
+            "Applying Wood after Air must update ShapeAppearance to Wood's color",
+        )

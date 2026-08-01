@@ -1,0 +1,17 @@
+[submodule "src/3rdParty/OndselSolver"]
+	path = src/3rdParty/OndselSolver
+	url = https://github.com/CivilCvCAD/OndselSolver.git
+[submodule "src/3rdParty/GSL"]
+	path = src/3rdParty/GSL
+	url = https://github.com/microsoft/GSL
+[submodule "src/Mod/AddonManager"]
+	path = src/Mod/AddonManager
+	url = https://github.com/CivilCvCAD/AddonManager.git
+[submodule "src/3rdParty/coin"]
+	path = src/3rdParty/coin
+	url = https://github.com/CivilCvCAD/coin.git
+	branch = civilcvcad-master
+[submodule "src/3rdParty/pivy"]
+	path = src/3rdParty/pivy
+	url = https://github.com/CivilCvCAD/pivy.git
+	branch = civilcvcad-master

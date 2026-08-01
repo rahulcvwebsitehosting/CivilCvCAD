@@ -1,0 +1,42 @@
+/tests:
+  /TestAssemblyWorkbench :
+    test: /usr/bin/CivilCvCADCmd -t  TestAssemblyWorkbench
+  /TestArch              :
+    test: /usr/bin/CivilCvCADCmd -t  TestArch
+  /TestCAMApp            :
+    test: /usr/bin/CivilCvCADCmd -t  TestCAMApp
+  /TestDraft             :
+    test: /usr/bin/CivilCvCADCmd -t  TestDraft
+  /TestFemApp            :
+    test: /usr/bin/CivilCvCADCmd -t  TestFemApp
+  /TestMaterialsApp      :
+    test: /usr/bin/CivilCvCADCmd -t  TestMaterialsApp
+  /MeshTestsApp          :
+    test: /usr/bin/CivilCvCADCmd -t  MeshTestsApp
+  /TestPartApp           :
+    test: /usr/bin/CivilCvCADCmd -t  TestPartApp
+  /TestPartDesignApp     :
+    test: /usr/bin/CivilCvCADCmd -t  TestPartDesignApp
+  /TestSketcherApp       :
+    test: /usr/bin/CivilCvCADCmd -t  TestSketcherApp
+  /TestSpreadsheet       :
+    test: /usr/bin/CivilCvCADCmd -t  TestSpreadsheet
+  /TestSurfaceApp        :
+    test: /usr/bin/CivilCvCADCmd -t  TestSurfaceApp
+  /TestTechDrawApp       :
+    test: /usr/bin/CivilCvCADCmd -t  TestTechDrawApp
+  /BaseTests             :
+    test: /usr/bin/CivilCvCADCmd -t  BaseTests
+  /UnitTests             :
+    test: /usr/bin/CivilCvCADCmd -t  UnitTests
+  /Document              :
+    test: /usr/bin/CivilCvCADCmd -t  Document
+  /Metadata              :
+    test: /usr/bin/CivilCvCADCmd -t  Metadata
+  /StringHasher          :
+    test: /usr/bin/CivilCvCADCmd -t  StringHasher
+  /UnicodeTests          :
+    test: /usr/bin/CivilCvCADCmd -t  UnicodeTests
+  /TestPythonSyntax      :
+    test: /usr/bin/CivilCvCADCmd -t  TestPythonSyntax
+

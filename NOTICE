@@ -1,0 +1,16 @@
+CivilCvCAD modification notice
+==============================
+
+CivilCvCAD is a modified distribution derived from the FreeCAD source code.
+The whole-tree CivilCvCAD rebrand and offline-only changes were applied on
+2026-07-30.
+
+Original copyright holders retain their copyrights. Their notices remain in
+the source files and the contributor list at src/Doc/CONTRIBUTORS. CivilCvCAD
+does not claim ownership of code written by those authors or by the FreeCAD
+Project Association.
+
+The main code is distributed under the GNU Lesser General Public License,
+version 2.1 or later, as stated in LICENSE and individual source headers.
+Bundled third-party components remain under their respective licenses and
+notices.

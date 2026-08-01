@@ -1,0 +1,20 @@
+
+blank_issues_enabled : false
+
+contact_links:
+
+-   about : Join the community on our Discord.
+    name : 💬 𝗗𝗶𝘀𝗰𝗼𝗿𝗱
+    url : https://discord.gg/w2cTKGzccC
+
+-   about : Join the community on our Forum.
+    name : 💬 𝗙𝗼𝗿𝘂𝗺
+    url : https://forum.civilcvcad.org
+
+-   about : Read on how CivilCvCAD is developed.
+    name : 📕 𝗛𝗮𝗻𝗱𝗯𝗼𝗼𝗸
+    url : https://civilcvcad.github.io/DevelopersHandbook
+
+-   about : Look up information about CivilCvCAD.
+    name : 🌐 𝗪𝗶𝗸𝗶
+    url : https://wiki.civilcvcad.org
