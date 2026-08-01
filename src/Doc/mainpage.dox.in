@@ -1,0 +1,111 @@
+/***************************************************************************
+ *   Copyright (c) 2002 Juergen Riegel <juergen.riegel@web.de>             *
+ *                                                                         *
+ *   This file is part of the CivilCvCAD CAx development system.              *
+ *                                                                         *
+ *   This library is free software; you can redistribute it and/or         *
+ *   modify it under the terms of the GNU Library General Public           *
+ *   License as published by the Free Software Foundation; either          *
+ *   version 2 of the License, or (at your option) any later version.      *
+ *                                                                         *
+ *   This library  is distributed in the hope that it will be useful,      *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU Library General Public License for more details.                  *
+ *                                                                         *
+ *   You should have received a copy of the GNU Library General Public     *
+ *   License along with this library; see the file COPYING.LIB. If not,    *
+ *   write to the Free Software Foundation, Inc., 59 Temple Place,         *
+ *   Suite 330, Boston, MA  02111-1307, USA                                *
+ *                                                                         *
+ ***************************************************************************/
+
+/**
+
+    @mainpage CivilCvCAD Source Documentation
+
+    @section toc Table of Contents
+    - @ref intro_main "Introduction"
+    - @ref organization "Organization of the API Documentation"
+    - @ref asyncrecompute "Async recompute threading rules"
+    - @ref other_doc "Other Documentation"
+
+    @section intro_main Introduction
+
+    This is the source documentation of CivilCvCAD. It
+    is automatically generated from the source code and describes the different
+    components of the CivilCvCAD source code, for both the parts written in C++
+    and Python.  The next section discusses the organization of this API
+    documentation and the last section describes other forms of documentation
+    that CivilCvCAD has.
+
+    @section organization Organization of the API Documentation
+
+    This documentation is divided into several topics of which the most important are:
+    - @ref CORE "Core"
+      - @ref BASE "Base"
+      - @ref APP "App"
+      - @ref GUI "Gui"
+    - @ref WORKBENCHES "Workbenches"
+    - @ref EMBEDDED "Embedded 3rd party packages"
+
+    Firstly, topic @ref CORE "Core" contains the core namespaces and classes
+    that all of CivilCvCAD relies on.  This consists of namespace %Base (see topic
+    @ref BASE "Base") that contains fundamental base classes, the namespace
+    %App (see topic @ref APP "App") that contains classes for CivilCvCAD in
+    command-line mode, and namespace %Gui (see topic @ref GUI "Gui") that
+    contains the classes for CivilCvCAD's GUI.
+
+    CivilCvCAD is highly modular and most of its functionality is within modules
+    that are called @ref WORKBENCHES "Workbenches". Workbenches can be written
+    in C++ or Python or in a combination of the two. Local workbenches can be
+    installed from trusted offline media.
+
+    Finally, there is the topic @ref EMBEDDED "Embedded 3rd party packages"
+    that contains 3rd-party software of which the source is embedded in
+    CivilCvCAD.  This means that during compilation, these packages will be
+    compiled and linked to CivilCvCAD as opposed to non-embedded 3rd-party
+    packages that are only linked to CivilCvCAD.  An example of an important
+    non-embedded 3rd party software package is Open CASCADE Technology.
+
+    @section other_doc Other Documentation
+
+    General application help is resolved only from locally installed
+    documentation. Build this source documentation locally to browse modules,
+    classes, namespaces, source headers, and inheritance graphics.
+
+  @if DEV_DOCUMENTATION
+
+  @mainpage CivilCvCAD source documentation
+
+    @image html civilcvcadsplash.png
+
+    <b>Welcome to CivilCvCAD source documentation!</b>
+
+    We hope you'll find it a convenient tool to explore, understand and
+    experiment with the internals of the program.
+
+    Being generated from the actual state of the code, this documentation
+    is by no means a well structured corpus or a textbook, but more an
+    utility to browse through the sources.
+
+    For application help, use the locally installed documentation.
+
+    CivilCvCAD being a fast moving target, don't hesitate to rebuild an up to
+    date doc from source as often as needed (\ref makingdocs "more info"). CPU cycles are cheap
+    nowadays!
+
+    CivilCvCAD is distributed as an offline-only application.
+
+  @endif
+
+<small>
+@GIT_REVISION_INFO@
+</small>
+ */
+
+/**
+ * @namespace std
+ * @brief The Standard namespace for the C++ library
+ */
+

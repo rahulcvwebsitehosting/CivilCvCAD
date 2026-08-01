@@ -1,0 +1,29 @@
+/** \defgroup GUI Gui
+ *  \ingroup CORE
+ *  \brief The Graphical User Interface of CivilCvCAD and the 3D View
+ */
+
+/** \namespace Gui
+    \brief The CivilCvCAD Graphical interface layer
+
+    This namespace includes the graphical interface of CivilCvCAD such as:
+    - The main window
+    - 3D View
+    - Tree
+
+  and so on......
+*/
+
+
+/** \namespace Gui::Dialog
+    \brief The namespace of the CivilCvCAD dialogs.
+*/
+
+
+/** \namespace Gui::DockWnd
+    \brief The namespace of the dockable windows of CivilCvCAD.
+*/
+
+/** \namespace Gui::PropertyEditor
+    \brief The namespace of the property editor for CivilCvCAD.
+*/

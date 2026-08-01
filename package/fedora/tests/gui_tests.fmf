@@ -1,0 +1,72 @@
+/tests:
+    /TestAssemblyWorkbench :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestAssemblyWorkbench
+    /TestArch              :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestArch
+    /TestCAMApp            :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestCAMApp
+    /TestDraft             :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestDraft
+    /TestFemApp            :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestFemApp
+    /TestMaterialsApp      :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestMaterialsApp
+    /MeshTestsApp          :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  MeshTestsApp
+    /TestPartApp           :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestPartApp
+    /TestPartDesignApp     :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestPartDesignApp
+    /TestSketcherApp       :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestSketcherApp
+    /TestSpreadsheet       :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestSpreadsheet
+    /TestSurfaceApp        :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestSurfaceApp
+    /TestTechDrawApp       :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestTechDrawApp
+    /BaseTests             :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  BaseTests
+    /UnitTests             :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  UnitTests
+    /Document              :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  Document
+    /Metadata              :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  Metadata
+    /StringHasher          :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  StringHasher
+    /UnicodeTests          :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  UnicodeTests
+    /TestPythonSyntax      :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestPythonSyntax
+    /TestArchGui           :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestArchGui
+    /TestCAMGui           :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestCAMGui
+    /TestDraftGui          :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestDraftGui
+    /TestFemGui            :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestFemGui
+    /TestImportGui         :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestImportGui
+    /TestMaterialsGui      :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestMaterialsGui
+    /TestOpenSCADGui       :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestOpenSCADGui
+    /TestPartGui           :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestPartGui
+    /TestPartDesignGui     :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestPartDesignGui
+    /TestTechDrawGui       :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  TestTechDrawGui
+    /Workbench             :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  Workbench
+    /Menu                  :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  Menu
+    /Menu.MenuDeleteCases  :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  Menu.MenuDeleteCases
+    /Menu.MenuCreateCases  :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  Menu.MenuCreateCases
+    /GuiDocument           :
+        test: wlheadless-run -- /usr/bin/CivilCvCAD  -t  GuiDocument
+

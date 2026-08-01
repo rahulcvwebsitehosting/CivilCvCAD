@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<package format="1" xmlns="https://wiki.civilcvcad.org/Package_Metadata">
+  <name>Test Workbench</name>
+  <description>A package.xml file for unit testing.</description>
+  <version>1.0.1</version>
+  <date>2022-01-07</date>
+  <maintainer email="developer1@civilcvcad.org">CivilCvCAD Developer 1</maintainer>
+  <maintainer email="developer2@civilcvcad.org">CivilCvCAD Developer 2</maintainer>
+  <author email="developer3@civilcvcad.org">CivilCvCAD Developer 3</author>
+  <author>CivilCvCAD Developer 4</author>
+  <author>CivilCvCAD Developer 5</author>
+  <license file="LICENSE">LGPLv2.1</license>
+  <url type="repository" branch="main">https://github.com/chennes/CivilCvCAD-Package</url>
+  <url type="readme">https://github.com/chennes/CivilCvCAD-Package/blob/main/README.md</url>
+  <url type="documentation">https://github.com/chennes/CivilCvCAD-Package/blob/main/README.md</url>
+  <url type="bugtracker">https://github.com/chennes/CivilCvCAD-Package/issues</url>
+  <url type="discussion">https://forum.civilcvcad.org/</url>
+  <icon>Resources/icons/PackageIcon.svg</icon>
+  <tag>Tag0</tag>
+  <tag>Tag1</tag>
+</package>

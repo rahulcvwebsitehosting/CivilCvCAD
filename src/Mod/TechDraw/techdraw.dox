@@ -1,0 +1,4 @@
+/** \defgroup TECHDRAW TechDraw
+ *  \ingroup CWORKBENCHES
+ *  \brief Framework to produce 2D drawing from CivilCvCAD documents. The successor of Drawing
+ */

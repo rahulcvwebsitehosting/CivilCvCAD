@@ -1,0 +1,11 @@
+summary:
+    Run All CivilCvCAD python tests
+prepare:
+    how: install
+    package: 
+    - xwayland-run
+    - weston
+discover:
+    how: fmf
+execute:
+    how: tmt
