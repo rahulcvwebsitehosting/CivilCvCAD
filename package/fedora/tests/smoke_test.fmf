@@ -1,0 +1,4 @@
+summary: Run All CivilCvCADCmd python tests
+test: /usr/bin/CivilCvCADCmd -v
+require: /usr/bin/CivilCvCADCmd
+duration: 1m

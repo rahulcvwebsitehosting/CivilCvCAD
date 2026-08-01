@@ -1,0 +1,2 @@
+#git archive --worktree-attributes --prefix=civilcvcad-0.13/ --output=civilcvcad.tar.gz HEAD
+imageformats    export-ignore

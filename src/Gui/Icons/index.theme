@@ -1,0 +1,13 @@
+[Icon Theme]
+Name=CivilCvCAD-default
+Comment=Default CivilCvCAD icon theme
+Inherits=Default
+
+# Directory list
+Directories=scalable
+
+[scalable]
+Size=48
+MinSize=8
+MaxSize=512
+Type=Scalable
