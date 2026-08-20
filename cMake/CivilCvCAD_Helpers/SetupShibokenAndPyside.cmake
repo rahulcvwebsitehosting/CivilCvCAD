@@ -188,7 +188,9 @@ file(WRITE "${OUT}"
     "# Auto-generated loading code for ${RCCBIN}\n"
     "from pathlib import Path\n"
     "from PySide${PYSIDE_MAJOR_VERSION}.QtCore import QResource\n"
-    "QResource.registerResource(str(Path(__file__).absolute().parent / \"${RCCBIN}\"))\n"
+    "_resource_file = Path(__file__).absolute().parent / \"${RCCBIN}\"\n"
+    "if not QResource.registerResource(str(_resource_file)):\n"
+    "    raise RuntimeError(f\"Invalid Qt resource bundle: {_resource_file}\")\n"
 )
 ]])
 

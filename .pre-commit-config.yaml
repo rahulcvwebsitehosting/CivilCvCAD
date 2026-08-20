@@ -12,13 +12,11 @@ files: |
         src/Mod/Assembly|
         src/Mod/BIM|
         src/Mod/CAM|
-        src/Mod/Cloud|
         src/Mod/Draft|
         src/Mod/Fem|
         src/Mod/Help|
         src/Mod/Import|
         src/Mod/Inspection|
-        src/Mod/JtReader|
         src/Mod/Measure|
         src/Mod/MeshPart|
         src/Mod/Mesh|

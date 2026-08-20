@@ -80,7 +80,7 @@
 #endif
 
 #else
-#   error "CivilCvCAD is not ported to this OS yet. For help see www.civilcvcad.org"
+#   error "CivilCvCAD is not ported to this OS yet"
 #endif
 
 #ifdef FC_OS_WIN32

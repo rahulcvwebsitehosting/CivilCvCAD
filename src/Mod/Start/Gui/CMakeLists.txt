@@ -47,6 +47,8 @@ SET(StartGui_SRCS
         DlgStartPreferencesImp.cpp
         DlgStartPreferencesImp.h
         AppStartGui.cpp
+        CreditsDialog.cpp
+        CreditsDialog.h
         FileCardDelegate.cpp
         FileCardDelegate.h
         FileCardView.cpp

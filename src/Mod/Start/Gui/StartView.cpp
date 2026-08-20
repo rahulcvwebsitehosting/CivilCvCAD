@@ -38,6 +38,7 @@
 #include <QShowEvent>
 
 #include "StartView.h"
+#include "CreditsDialog.h"
 #include "FileCardDelegate.h"
 #include "FileCardView.h"
 #include "FirstStartWidget.h"
@@ -156,6 +157,43 @@ StartView::StartView(QWidget* parent)
     }
 
     documentsContentLayout->setSpacing(static_cast<int>(cardSpacing));
+
+    // Credits section
+    auto creditsSection = gsl::owner<QWidget*>(new QWidget(documentsScrollWidget));
+    creditsSection->setObjectName(QStringLiteral("CreditsSection"));
+    creditsSection->setStyleSheet(QStringLiteral(
+        "#CreditsSection { background-color: #0E1F38; border: 1px dashed #F5A623; border-radius: 6px; }"
+        "#CreditsText { color: #D8E4F2; font-size: 13px; }"
+        "#CreditsText b { color: #F5A623; }"
+        "#CreditsSectionButton { background-color: #F5A623; color: #0E1F38; border: none;"
+        "  border-radius: 4px; padding: 6px 16px; font-weight: 700; }"
+        "#CreditsSectionButton:hover { background-color: #FFC14D; }"
+        "#CreditsSectionButton:pressed { background-color: #D98F1C; }"
+    ));
+    auto creditsLayout = gsl::owner<QHBoxLayout*>(new QHBoxLayout(creditsSection));
+    creditsLayout->setContentsMargins(16, 10, 16, 10);
+    creditsLayout->setSpacing(12);
+
+    auto creditsText = gsl::owner<QLabel*>(new QLabel(creditsSection));
+    creditsText->setObjectName(QStringLiteral("CreditsText"));
+    creditsText->setTextFormat(Qt::RichText);
+    creditsText->setOpenExternalLinks(false);
+    creditsText->setText(
+        QStringLiteral("<b>%1</b> — %2")
+            .arg(tr("Built by Rahul Shyam"),
+                 tr("Civil engineer who codes. Follow the build on social media."))
+    );
+    creditsText->setWordWrap(true);
+    creditsLayout->addWidget(creditsText, 1);
+    _creditsText = creditsText;
+
+    auto creditsSectionButton = gsl::owner<QPushButton*>(new QPushButton(creditsSection));
+    creditsSectionButton->setObjectName(QStringLiteral("CreditsSectionButton"));
+    creditsSectionButton->setText(tr("View Credits"));
+    connect(creditsSectionButton, &QPushButton::clicked, this, &StartView::creditsButtonClicked);
+    creditsLayout->addWidget(creditsSectionButton);
+
+    documentsContentLayout->addWidget(creditsSection);
     documentsContentLayout->addStretch();
 
 
@@ -167,6 +205,10 @@ StartView::StartView(QWidget* parent)
     _openFirstStart->setIcon(QIcon(QLatin1String(":/icons/preferences-general.svg")));
     connect(_openFirstStart, &QPushButton::clicked, this, &StartView::openFirstStartClicked);
 
+    _creditsButton = gsl::owner<QPushButton*>(new QPushButton());
+    _creditsButton->setObjectName(QStringLiteral("CreditsButton"));
+    connect(_creditsButton, &QPushButton::clicked, this, &StartView::creditsButtonClicked);
+
     _showOnStartupCheckBox = gsl::owner<QCheckBox*>(new QCheckBox());
     bool showOnStartup = hGrp->GetBool("ShowOnStartup", true);
     _showOnStartupCheckBox->setCheckState(
@@ -175,6 +217,8 @@ StartView::StartView(QWidget* parent)
     connect(_showOnStartupCheckBox, &QCheckBox::toggled, this, &StartView::showOnStartupChanged);
 
     footerLayout->addWidget(_openFirstStart);
+    footerLayout->addStretch();
+    footerLayout->addWidget(_creditsButton);
     footerLayout->addStretch();
     footerLayout->addWidget(_showOnStartupCheckBox);
 
@@ -435,6 +479,12 @@ void StartView::openFirstStartClicked()
     _contents->setCurrentIndex(0);
 }
 
+void StartView::creditsButtonClicked()
+{
+    CreditsDialog dialog(this);
+    dialog.exec();
+}
+
 void StartView::firstStartWidgetDismissed()
 {
     auto hGrp = App::GetApplication().GetParameterGroupByPath(
@@ -481,6 +531,15 @@ void StartView::showEvent(QShowEvent* event)
             );
         }
     }
+
+    // Show the credits popup once per session on the front page
+    if (!_creditsAutoShown) {
+        _creditsAutoShown = true;
+        QTimer::singleShot(400, this, [this]() {
+            CreditsDialog::showIfEnabled(Gui::getMainWindow());
+        });
+    }
+
     Gui::MDIView::showEvent(event);
 }
 
@@ -537,5 +596,13 @@ void StartView::retranslateUi()
 
     QString application = QString::fromUtf8(App::Application::Config()["ExeName"].c_str());
     _openFirstStart->setText(tr("Open First Start Setup"));
+    _creditsButton->setText(tr("Credits"));
+    if (_creditsText) {
+        _creditsText->setText(
+            QStringLiteral("<b>%1</b> — %2")
+                .arg(tr("Built by Rahul Shyam"),
+                     tr("Civil engineer who codes. Follow the build on social media."))
+        );
+    }
     _showOnStartupCheckBox->setText(tr("Do not show this Start page again (start with blank screen)"));
 }

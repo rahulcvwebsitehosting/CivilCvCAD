@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CivilCvCAD offline help</title>
+  <style>
+    :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+    body { max-width: 860px; margin: 2rem auto; padding: 0 1.25rem 3rem; line-height: 1.55; }
+    h1, h2, h3 { line-height: 1.2; }
+    code { background: color-mix(in srgb, CanvasText 10%, Canvas); padding: .1rem .3rem; border-radius: .25rem; }
+    .note { border-left: .3rem solid #2b6cb0; padding: .7rem 1rem; background: color-mix(in srgb, #2b6cb0 10%, Canvas); }
+  </style>
+</head>
+<body>
+  <h1>CivilCvCAD offline help</h1>
+  <p class="note">This guide is included with CivilCvCAD and works without an internet connection.</p>
+
+  <h2>Start drawing</h2>
+  <h3>Parametric 3D model</h3>
+  <ol>
+    <li>On the Start page, choose <strong>Parametric Body</strong>.</li>
+    <li>Select <strong>Create sketch</strong>, then choose the XY, XZ, or YZ plane.</li>
+    <li>Draw a closed profile with the line, polyline, rectangle, circle, or arc tools.</li>
+    <li>Close the sketch and use <strong>Pad</strong> to turn it into a solid.</li>
+    <li>Add more sketches and use Pocket, Revolve, Fillet, and Chamfer as needed.</li>
+  </ol>
+
+  <h3>2D drawing</h3>
+  <ol>
+    <li>On the Start page, choose <strong>2D Draft</strong>.</li>
+    <li>Use the Draft line, polyline, rectangle, circle, arc, dimension, and annotation tools.</li>
+    <li>Turn on grid and snapping from the Draft status controls for precise placement.</li>
+  </ol>
+
+  <h3>Architectural model</h3>
+  <p>Choose <strong>BIM/Architecture</strong> on the Start page, then create walls, structures, slabs, doors, windows, and annotations from the BIM workbench.</p>
+
+  <h2>Finding tools</h2>
+  <p>The workbench selector changes the available commands:</p>
+  <ul>
+    <li><strong>Sketcher</strong> creates constrained 2D profiles.</li>
+    <li><strong>Part Design</strong> creates feature-based solid models.</li>
+    <li><strong>Draft</strong> provides 2D drafting and snapping.</li>
+    <li><strong>BIM</strong> creates building and civil/architectural objects.</li>
+    <li><strong>TechDraw</strong> creates printable drawing pages from 3D models.</li>
+  </ul>
+  <p>Commands remain disabled until their prerequisites exist. For example, Pad needs a closed sketch, and most Part Design commands need an active Body.</p>
+
+  <h2>Examples and recovery</h2>
+  <p>The Start page includes sample models that can be opened immediately. If a preference or extension prevents normal startup, choose <strong>Help &gt; Restart in Safe Mode</strong>. Safe Mode temporarily ignores user configuration; it does not delete files or preferences.</p>
+  <p>Additional offline documentation can be placed in a local folder and selected under <strong>Edit &gt; Preferences &gt; General &gt; Help</strong>.</p>
+</body>
+</html>

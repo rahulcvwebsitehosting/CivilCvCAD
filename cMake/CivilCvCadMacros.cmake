@@ -341,6 +341,7 @@ macro(find_pip_package PACKAGE)
 			COMMAND ${Python3_EXECUTABLE} -m pip show ${PACKAGE}
 			RESULT_VARIABLE FAILURE
 			OUTPUT_VARIABLE PRINT_OUTPUT
+			ERROR_QUIET
 	)
 	if(NOT FAILURE)
 		# Extract Name: and Location: lines and use them to construct the include directory
@@ -388,16 +389,22 @@ endmacro()
 
 macro(find_python_runtime_dep PIP_NAME IMPORT_NAME VERSION_VAR MISSING_MESSAGE)
     find_pip_package(${PIP_NAME})
-    if(${PIP_NAME}_FOUND)
-        execute_process(
-            COMMAND ${Python3_EXECUTABLE} -c "import ${IMPORT_NAME};print(${IMPORT_NAME}.__version__, end='')"
-            RESULT_VARIABLE FAILURE OUTPUT_VARIABLE ${VERSION_VAR})
-        if(FAILURE)
-            message(WARNING "Could not import ${IMPORT_NAME} Python package.")
-            set(${PIP_NAME}_FOUND OFF)
-        endif()
+    set(_pip_metadata_found ${${PIP_NAME}_FOUND})
+    # Conda packages are importable at runtime but do not always install the
+    # pip metadata used by find_pip_package(). Test the operation CivilCvCAD
+    # actually needs instead of reporting a false missing-dependency warning.
+    execute_process(
+        COMMAND ${Python3_EXECUTABLE} -c
+            "import ${IMPORT_NAME};print(getattr(${IMPORT_NAME}, '__version__', 'unknown'), end='')"
+        RESULT_VARIABLE FAILURE OUTPUT_VARIABLE ${VERSION_VAR})
+    if(FAILURE)
+        message(WARNING "Could not import ${IMPORT_NAME} Python package runtime dependency. ${MISSING_MESSAGE}")
+        set(${PIP_NAME}_FOUND OFF)
     else()
-        message(WARNING "Could not find ${PIP_NAME} Python package runtime dependency. ${MISSING_MESSAGE}")
+        set(${PIP_NAME}_FOUND ON)
+        if(NOT _pip_metadata_found)
+            message(STATUS "Found runtime-importable ${IMPORT_NAME} Python package")
+        endif()
     endif()
 endmacro()
 

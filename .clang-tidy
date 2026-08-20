@@ -9,7 +9,6 @@ concurrency-*,-modernize-use-trailing-return-type, -modernize-use-nodiscard,-rea
 WarningsAsErrors: ''
 HeaderFilterRegex: ''
 FormatStyle:     file
-User:            florians
 CheckOptions:
   - key:             readability-suspicious-call-argument.PrefixSimilarAbove
     value:           '30'

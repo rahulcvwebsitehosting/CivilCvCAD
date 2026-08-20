@@ -78,12 +78,15 @@ TEST_F(VRMLObjectTest, loadVRMLWithTextures)
 
     auto res = vrml->Resources.getValues();
     EXPECT_EQ(res.size(), 6);
-    EXPECT_EQ(res[0], std::string("CivilCvCAD/CivilCvCAD1.png"));
-    EXPECT_EQ(res[1], std::string("CivilCvCAD/CivilCvCAD2.png"));
-    EXPECT_EQ(res[2], std::string("CivilCvCAD/CivilCvCAD3.png"));
-    EXPECT_EQ(res[3], std::string("CivilCvCAD/CivilCvCAD4.png"));
-    EXPECT_EQ(res[4], std::string("CivilCvCAD/CivilCvCAD5.png"));
-    EXPECT_EQ(res[5], std::string("CivilCvCAD/CivilCvCAD6.png"));
+    // Texture resource names come from the external VRML payload in the
+    // fixture.  They are file paths, not application branding, so importing
+    // them must preserve their spelling exactly.
+    EXPECT_EQ(res[0], std::string("FreeCAD/FreeCAD1.png"));
+    EXPECT_EQ(res[1], std::string("FreeCAD/FreeCAD2.png"));
+    EXPECT_EQ(res[2], std::string("FreeCAD/FreeCAD3.png"));
+    EXPECT_EQ(res[3], std::string("FreeCAD/FreeCAD4.png"));
+    EXPECT_EQ(res[4], std::string("FreeCAD/FreeCAD5.png"));
+    EXPECT_EQ(res[5], std::string("FreeCAD/FreeCAD6.png"));
 
     auto url = vrml->Urls.getValues();
     EXPECT_EQ(url.size(), 6);

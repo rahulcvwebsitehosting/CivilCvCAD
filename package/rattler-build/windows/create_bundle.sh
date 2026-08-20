@@ -33,7 +33,7 @@ cp -a ${conda_env}/Library/Ext ${copy_dir}/Ext
 cp -a ${conda_env}/Library/lib ${copy_dir}/lib
 cp -a ${conda_env}/Library/Mod ${copy_dir}/Mod
 mkdir -p ${copy_dir}/doc
-cp -a ${conda_env}/Library/doc/{ThirdPartyLibraries.html,LICENSE.html} ${copy_dir}/doc
+cp -a ${conda_env}/Library/doc/. ${copy_dir}/doc
 
 # delete unnecessary stuff
 find ${copy_dir} -name \*.a -delete
@@ -49,6 +49,23 @@ set +x
 
 echo '[Paths]' >> ${copy_dir}/bin/qt6.conf
 echo 'Prefix = ../lib/qt6' >> ${copy_dir}/bin/qt6.conf
+
+# Binary Python resources must begin with Qt's `qres` magic. A plain `rcc`
+# invocation without `--binary` produces C++ source text with the same output
+# filename; Qt then silently rejects it and entire workbenches lose their UI.
+echo "Validating packaged Qt resource bundles..."
+while IFS= read -r -d '' resource_file; do
+    resource_magic="$(od -An -N4 -t x1 "${resource_file}" | tr -d ' \n')"
+    if [[ "${resource_magic}" != "71726573" ]]; then
+        echo "Invalid Qt resource bundle (expected qres header): ${resource_file}" >&2
+        exit 1
+    fi
+done < <(find "${copy_dir}" -type f -name '*.rcc' -print0)
+
+if [[ ! -f "${copy_dir}/doc/Online_Help_Startpage.html" ]]; then
+    echo "Bundled offline help landing page is missing" >&2
+    exit 1
+fi
 
 # convenient shortcuts to run the binaries
 if [ -x /c/ProgramData/chocolatey/tools/shimgen.exe ]; then

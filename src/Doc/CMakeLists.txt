@@ -4,12 +4,15 @@ configure_file(ThirdPartyLibraries.html.cmake
     ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_DOCDIR}/ThirdPartyLibraries.html)
 configure_file(LICENSE.html
     ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_DOCDIR}/LICENSE.html COPYONLY)
+configure_file(Online_Help_Startpage.html
+    ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_DOCDIR}/Online_Help_Startpage.html COPYONLY)
 
 # The CONTRIBUTORS file is now compiled into the CivilCvCAD GUI Qt resource file
 
 INSTALL(FILES
     ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_DOCDIR}/ThirdPartyLibraries.html
     LICENSE.html
+    Online_Help_Startpage.html
     DESTINATION ${CMAKE_INSTALL_DOCDIR}
 )
 

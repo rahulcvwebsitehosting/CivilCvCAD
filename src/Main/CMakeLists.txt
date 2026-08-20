@@ -4,6 +4,17 @@ configure_file(civilcvcad.rc.cmake ${CMAKE_CURRENT_BINARY_DIR}/civilcvcad.rc)
 configure_file(civilcvcadCmd.rc.cmake ${CMAKE_CURRENT_BINARY_DIR}/civilcvcadCmd.rc)
 file(COPY icon.ico DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
+# The Windows resource compiler does not emit a dependency for an icon named
+# inside an .rc file. Track it explicitly so changing the brand icon actually
+# rebuilds the executable resources instead of leaving the previous icon cached.
+set(_civilcvcad_icon "${CMAKE_CURRENT_SOURCE_DIR}/icon.ico")
+set_property(
+    SOURCE
+        "${CMAKE_CURRENT_BINARY_DIR}/civilcvcad.rc"
+        "${CMAKE_CURRENT_BINARY_DIR}/civilcvcadCmd.rc"
+    APPEND PROPERTY OBJECT_DEPENDS "${_civilcvcad_icon}"
+)
+
 ######################## CivilCvCADMain ########################
 if(BUILD_GUI)
 

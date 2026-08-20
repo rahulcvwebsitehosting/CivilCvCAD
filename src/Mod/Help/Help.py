@@ -74,17 +74,25 @@ PREFS.SetBool("optionWiki", False)
 PREFS.SetBool("optionMarkdown", False)
 PREFS.SetBool("optionGithub", False)
 PREFS.SetBool("optionCustom", True)
-if not PREFS.GetString("Location", ""):
-    PREFS.SetString(
-        "Location",
-        os.path.join(
-            CivilCvCAD.getUserAppDataDir(),
-            "Mod",
-            "offline-documentation",
-            "CivilCvCAD-documentation-main",
-            "wiki",
-        ),
-    )
+
+# The offline distribution ships a compact help landing page in DocPath. Older
+# builds pointed at an Addon Manager download location even though networking
+# is disabled, leaving every new installation with a path that cannot exist.
+_legacy_location = os.path.join(
+    CivilCvCAD.getUserAppDataDir(),
+    "Mod",
+    "offline-documentation",
+    "CivilCvCAD-documentation-main",
+    "wiki",
+)
+_bundled_location = CivilCvCAD.ConfigGet("DocPath")
+_configured_location = PREFS.GetString("Location", "")
+if (
+    not _configured_location
+    or os.path.normcase(os.path.normpath(_configured_location))
+    == os.path.normcase(os.path.normpath(_legacy_location))
+):
+    PREFS.SetString("Location", _bundled_location)
 ICON = ":/icons/help-browser.svg"
 
 
@@ -184,6 +192,13 @@ def get_location(page) -> tuple:
         candidate = os.path.join(location, page + ext)
         if os.path.isfile(candidate):
             return (candidate, pagename)
+
+    # Context-sensitive command pages are not all included in the compact
+    # offline package. Fall back to its useful landing page instead of raising
+    # the misleading "help files location" error.
+    fallback = os.path.join(_bundled_location, "Online_Help_Startpage.html")
+    if os.path.isfile(fallback):
+        return (fallback, translate("Help", "Offline Help"))
     location = ""
     return (location, pagename)
 

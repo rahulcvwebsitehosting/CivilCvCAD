@@ -152,7 +152,7 @@ jobs:
       - name: Get number of commits in the changeset
         if: (env.isPR == 'true' || env.isPush == 'true') && !inputs.skipBuild
         run: |
-          commitCnt=$(jq -re '.ahead_by' ${{ env.logdir }}compare.json)
+          commitCnt=$(jq -r '.ahead_by // 0' ${{ env.logdir }}compare.json)
           echo "Changeset is composed of $commitCnt commit(s)" | tee -a ${{env.reportdir}}${{ env.reportfilename }}
       - name: Get files modified in changeset #TODO check what happens with deleted file in the subsequent process
         if: env.isPR == 'true' && !inputs.skipBuild

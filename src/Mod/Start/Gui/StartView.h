@@ -97,6 +97,7 @@ protected:
     void showOnStartupChanged(bool checked);
     void openFirstStartClicked();
     void firstStartWidgetDismissed();
+    void creditsButtonClicked();
 
     QString fileCardStyle() const;
 
@@ -115,9 +116,12 @@ private:
     QLabel* _examplesLabel;
     QLabel* _recentFilesLabel;
     QLabel* _customFolderLabel;
+    QLabel* _creditsText;
     QPushButton* _openFirstStart;
+    QPushButton* _creditsButton;
     QCheckBox* _showOnStartupCheckBox;
 
+    bool _creditsAutoShown = false;
     bool isInitialized = false;
 
 };  // namespace StartGui

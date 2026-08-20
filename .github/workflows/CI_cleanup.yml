@@ -50,7 +50,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: FC-CI-cleaner
+  group: CIVILCVCAD-CI-cleaner
   cancel-in-progress: false
 
 jobs:
