@@ -12,10 +12,6 @@
 - changed-files:
   - any-glob-to-any-file:  ['.github/**/*']
 
-"Mod: Addon Manager":
-- changed-files:
-  - any-glob-to-any-file:  ['src/Mod/AddonManager/**/*']
-
 "Mod: Materials":
 - changed-files:
   - any-glob-to-any-file:  ['src/Mod/Material/**/*']
