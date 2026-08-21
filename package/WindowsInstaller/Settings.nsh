@@ -8,12 +8,9 @@ These typically need to be modified for each CivilCvCAD release
 
 # Make the installer as small as possible
 # Using /SOLID is usually better for file size but it can't be used if the original size is
-# more than 2GB, if building with /SOLID fails try disabling it
-# comment this or use /DFC_TEST_BUILD command line option for testing builds since it will reduce
-# the time to create an installer a lot at the cost of a much greater file size.
-# So assure it is active for release builds!
+# more than 2GB. Disabling /SOLID avoids 32-bit NSIS memory mapping limit for large payloads.
 !ifndef FC_TEST_BUILD
-    SetCompressor /SOLID lzma
+    SetCompressor lzma
 !endif
 
 #--------------------------------
@@ -33,8 +30,8 @@ These typically need to be modified for each CivilCvCAD release
 #!define FILES_DEPS "${__FILEDIR__}\MSVCRedist"
 
 #--------------------------------
-# get version info from civilcvcadcmd
-!system '${FILES_CIVILCVCAD}\bin\civilcvcadcmd.exe --safe-mode "${__FILEDIR__}\write_version_nsh.py"' = 0
+# get version info from CivilCvCADCmd
+!system '"${FILES_CIVILCVCAD}\bin\CivilCvCADCmd.exe" --safe-mode "${__FILEDIR__}\write_version_nsh.py"' = 0
 !include "${__FILEDIR__}\version.nsh"
 !delfile "${__FILEDIR__}\version.nsh"
 
