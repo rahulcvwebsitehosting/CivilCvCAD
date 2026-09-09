@@ -184,6 +184,12 @@ file(
     OUTPUT "${CMAKE_BINARY_DIR}/cMake/CivilCvCAD_Helpers/PysideQtRccGen.cmake"
     CONTENT [[
 cmake_minimum_required(VERSION 3.22.0)
+# rcc can succeed while emitting C++ instead of a binary bundle. Reject that
+# output at build time, before it becomes a missing-resource workbench failure.
+file(READ "${RCCPATH}" _rcc_magic LIMIT 4 HEX)
+if(NOT _rcc_magic STREQUAL "71726573")
+    message(FATAL_ERROR "Invalid binary Qt resource: ${RCCPATH} (expected qres header)")
+endif()
 file(WRITE "${OUT}"
     "# Auto-generated loading code for ${RCCBIN}\n"
     "from pathlib import Path\n"
@@ -237,6 +243,7 @@ function(PYSIDE_WRAP_RC)
                 COMMAND "${PYSIDE_RCC_EXECUTABLE}" ${CIVILCVCAD_RCC_OPTIONS}
                         --binary "${infile}" -o "${rccbin}"
                 COMMAND "${CMAKE_COMMAND}" -DOUT="${rcpy}" -DRCCBIN="${rccbin_relative}"
+                        -DRCCPATH="${rccbin}"
                         -DPYSIDE_MAJOR_VERSION="${PYSIDE_MAJOR_VERSION}"
                         -P "${CMAKE_BINARY_DIR}/cMake/CivilCvCAD_Helpers/PysideQtRccGen.cmake"
                 MAIN_DEPENDENCY "${infile}"
