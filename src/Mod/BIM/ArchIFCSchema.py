@@ -37,7 +37,12 @@ import CivilCvCAD
 from draftutils import params
 
 ifcVersions = ["IFC4", "IFC2X3"]
-IfcVersion = ifcVersions[params.get_param_arch("IfcVersion")]
+# Missing preference resources can return None; stale user configurations may
+# also contain an out-of-range index. Keep BIM importable with the IFC4 default.
+_ifc_version_index = params.get_param_arch("IfcVersion")
+if type(_ifc_version_index) is not int or not 0 <= _ifc_version_index < len(ifcVersions):
+    _ifc_version_index = 0
+IfcVersion = ifcVersions[_ifc_version_index]
 
 with open(
     os.path.join(
